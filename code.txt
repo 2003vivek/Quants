@@ -1,0 +1,90 @@
+import ccxt 
+import BYBIT_API
+import time
+from threading import Thread
+
+
+
+bit = ccxt.bybit({
+    'apiKey': BYBIT_API.apikey,
+    'secret': BYBIT_API.secretkey,
+    'options': {
+        'createMarketBuyOrderRequiresPrice': False},
+    'testnet':'True'
+
+})
+
+
+
+def bybitbook():
+    obook = bit.fetch_order_book('ETH-29SEP23')
+    bids = obook['bids'][0][0]
+    asks = obook['asks'][0][0]
+    return bids , asks
+
+    
+def order():
+    order_buy = bit.createOrder('ETH-29SEP23', 'limit', 'buy', 0.01, bybitbook()[1])
+    order_sell = bit.createOrder('ETH-29SEP23', 'limit', 'sell', 0.01, bybitbook()[0])
+    return order_buy , order_sell 
+    
+    
+
+def info():
+    infos = bit.fetch_positions(symbols='ETH-29SEP23')
+    return infos
+    
+def bot():
+    bal=bit.fetch_balance()
+    print(bal)
+    profit=False
+    loss=False
+    curr_ask_price=bybitbook()[1]
+    curr_bid_price=bybitbook()[0]
+    print(f'THE CURRENT PRICE ask IS {curr_ask_price}$')
+    print(f'THE CURRENT PRICE bid IS {curr_bid_price}$')
+    pos = info()
+    size = float(pos[0]['info']['size'])
+    
+    if size == 0.0:
+        print('buy order created...')
+        # print(order()[0])
+    
+    elif size > 0.0:
+        pos1 = info()
+        size1 = float(pos1[0]['info']['size'])
+        entryprice=pos1[0]['entryPrice']
+        targetPrice=entryprice+11
+        stoplossprice=entryprice-11
+        
+        if bybitbook()[0] >= targetPrice:
+            print('creating exit position...')
+            # order_sell = bit.createOrder('ETH-29SEP23', 'limit', 'sell', size1, bybitbook()[0])
+            get_pos=info()
+            loc_size=float(get_pos[0]['info']['size'])
+            if loc_size == 0.0:
+                profit=True
+                print(profit)
+            
+        elif bybitbook()[0] <= stoplossprice:
+            print('creating exit SL position...')
+            # order_sell = bit.createOrder('ETH-29SEP23', 'limit', 'sell', size1, bybitbook()[0])
+            get_pos2=info()
+            loc_size2=float(get_pos2[0]['info']['size'])
+            if loc_size2 == 0.0:
+                loss=True
+                print(loss)
+            
+                if loss==True:
+                    print('buy order created 2X of SIZE...')
+                    # order_buy = bit.createOrder('ETH-29SEP23', 'limit', 'buy', size1*2, bybitbook()[1])
+                    # print(order_buy)
+                    
+                
+        else:
+            print('-------------> WAITING <.........')
+
+while True:
+    thread=Thread(target=bot)
+    thread.start()
+    time.sleep(7)
