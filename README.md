@@ -21,7 +21,7 @@ To get started with any of the trading strategies, follow these steps:
 
 Clone the repository to your local machine:
 
-git clone https://github.com/yourusername/trading-strategies.git
+git clon https://github.com/2003vivek/Quants/Strategy-name.
 Navigate to the directory of the strategy you want to use.
 
 License
