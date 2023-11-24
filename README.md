@@ -1,6 +1,7 @@
 # Quants
 Trading Strategies Repository
 Welcome to the Trading Strategies Repository! In this repository, you'll find a collection of various trading strategies implemented in PYTHON programming language. Each strategy comes with a description, code, and instructions on how to use it. Whether you're a beginner looking to learn about trading or an experienced trader seeking new ideas, this repository has something for you.
+<img src="https://images.unsplash.com/photo-1608603742375-4ec9f53da578?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt"not available image">
 
 Strategies
 RSI-Based Martingale Strategy
